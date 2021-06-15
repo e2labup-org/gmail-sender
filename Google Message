@@ -1,9 +1,10 @@
 from Google import Create_Service
 import base64
+from apscheduler.schedulers.blocking import BlockingScheduler
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import docx2txt
 import schedule
+from datetime import datetime
 import time
 
 
@@ -14,16 +15,25 @@ SCOPES = ['https://mail.google.com/']
 
 service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
 
-running = True
-def test():
 
+sched = BlockingScheduler()
+def my_job(message):
+#def test():
 
-    emailMsg = docx2txt.process(r'''C:\Users\Usuario\Documents\GMAIL_API\Archivo\Mensaje.docx''')
+#MENSAJE POR HTML
+    emailMsg = """\
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1 style="color:SlateGray;">Mensaje de experimento</h1>
+    </body>
+</html>
+"""
 
     mimeMessage = MIMEMultipart()
     mimeMessage['to'] = '<gabrielamylen15@gmail.com>, <gabriela.espinoza@aiesec.net>'
     mimeMessage['subject'] = 'Mensaje enviado desde Python'
-    mimeMessage.attach(MIMEText(emailMsg, 'plain'))
+    mimeMessage.attach(MIMEText(emailMsg, 'html'))
     raw_string = base64.urlsafe_b64encode(mimeMessage.as_bytes()).decode()
 
     message = service.users().messages().send(userId='me', body={'raw': raw_string}).execute()
@@ -34,9 +44,18 @@ def test():
     print(message)
 
 
-    return schedule.CancelJob
-#Hora programada
-schedule.every().day.at("20:55").do(test)
-while running:
-    schedule.run_pending()
-    time.sleep(1)
+#PROGRAMACIÓN DE FECHA Y HORA
+
+while True:
+    fecha_str = input('\n Ingrese fecha y hora con el siguiente formato (dd/mm/aaaa-hh:mm): ')
+    try:
+        fecha = datetime.strptime(fecha_str, '%d/%m/%Y-%H:%M').strftime('%Y-%m-%d %H:%M:%S')
+        print("\n Tu fecha y hora es: ")
+        print(str(fecha))
+    except ValueError:
+        print("\n No ha ingresado una fecha correcta")
+    else:
+        break
+
+sched.add_job(my_job, 'date', run_date=(str(fecha)), args=['text'])
+sched.start()
