@@ -29,7 +29,7 @@ def my_job(message):
     </body>
 </html>
 """
-
+#Creación de MIME object para el creación de correo y especificaciones.  
     mimeMessage = MIMEMultipart()
     mimeMessage['to'] = '<gabrielamylen15@gmail.com>, <gabriela.espinoza@aiesec.net>'
     mimeMessage['subject'] = 'Mensaje enviado desde Python'
