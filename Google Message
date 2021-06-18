@@ -7,15 +7,15 @@ import schedule
 from datetime import datetime
 import time
 
-
-CLIENT_SECRET_FILE = 'client_secret_1.json'
+#Archivo de Google Cloud: credencial de OAuth 2.0 Client IDs. El credencia permite el acceso a API.
+CLIENT_SECRET_FILE = 'client_secret_2.json'
 API_NAME = 'gmail'
 API_VERSION = 'v1'
 SCOPES = ['https://mail.google.com/']
 
 service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
 
-
+#Módulo Scheduler para programar el envío de correo
 sched = BlockingScheduler()
 def my_job(message):
 #def test():
