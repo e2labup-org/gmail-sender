@@ -133,7 +133,7 @@ now = datetime.now()
 delta = fecha - now
 
 if delta > timedelta(0):
-    target1 = fecha - timedelta(minutes=3)
+    target1 = fecha - timedelta(minutes=30)
     target2= fecha - timedelta(minutes=1)
     target3= fecha + timedelta(minutes= Duracionexp)
 
