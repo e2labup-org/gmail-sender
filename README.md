@@ -50,10 +50,10 @@ Creación del token:
 Funcionalidad:  
 Para ejecutar este programa, al correrse el script, se pide al usuario ingresar la fecha y hora.
 A partir de ello, se muestra la fecha y hora de envío de cada uno de los tres mensajes. Y a medida que se cumpla el tiempo establecido, se van enviando los mensajes a los correos destinatarios de Gmail. 
-Input: 
-- Fecha y hora del experimento: 2021-06-25-17:30 (Ejemplo)
-- Duración del experimento: (en minutos)
-Output:
+Input (Ejemplo): 
+- Fecha y hora del experimento: 2021-06-25-17:30 
+- Duración del experimento: 5 (en minutos)
+Output (Ejemplo):
 El primer correo será enviado (30 minutos antes del inicio): 
 2021-06-25 17:27:00
 El segundo correo será enviado (1 minuto antes del inicio):
