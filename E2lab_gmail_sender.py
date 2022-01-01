@@ -51,7 +51,10 @@ class Participant():
         self.fecha = datetime.strptime(self.fecha, '%d/%m/%Y-%H:%M')
         sched.add_job(self.message, 'date', run_date=((self.fecha)), args=['text'])
         print("El correo de prueba será enviado para {} {} al {} en {}".format(self.nombre,self.apellidos,self.email,self.fecha))
-        sched.start()
 
-participante = Participant('Mejia Ramos','Sergio Gonzalo','sg.mejiar@alum.up.edu.pe',"1/01/2022-11:02")
+participante = Participant('Mejia Ramos','Sergio Gonzalo','sg.mejiar@alum.up.edu.pe',"1/01/2022-11:56")
+participante2 = Participant('Mejia Ramitos','Sergio Gonzalo','sg.mejiar@up.edu.pe',"1/01/2022-11:57")
 participante.send_email()
+participante2.send_email() 
+
+sched.start()
