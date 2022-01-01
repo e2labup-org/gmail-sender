@@ -1,10 +1,8 @@
-from email import message
-from Google import Create_Service
+from Google_Module import Create_Service
 import base64
 from apscheduler.schedulers.blocking import BlockingScheduler
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import schedule
 from datetime import datetime
 from datetime import timedelta
 import time
@@ -47,7 +45,7 @@ def my_job1(message1):
    #Envío del primer correo
    
     mimeMessage1 = MIMEMultipart()
-    mimeMessage1['to'] = '---- ' # Destinatarios (Cuentas de correos)
+    mimeMessage1['to'] = 'sg.mejiar@alum.up.edu.pe' # Destinatarios (Cuentas de correos)
     mimeMessage1['subject'] = 'Mensaje enviado desde Python 1'
     mimeMessage1.attach(MIMEText(emailMsg_1, 'html'))
     raw_string1 = base64.urlsafe_b64encode(mimeMessage1.as_bytes()).decode()
@@ -80,7 +78,7 @@ def my_job2(message2):
    #Envío del segundo correo
    
     mimeMessage2 = MIMEMultipart()
-    mimeMessage2['to'] = '---- ' # Destinatarios (Cuentas de correos)
+    mimeMessage2['to'] = 'sg.mejiar@alum.up.edu.pe' # Destinatarios (Cuentas de correos)
     mimeMessage2['subject'] = 'Mensaje enviado desde Python 2'
     mimeMessage2.attach(MIMEText(emailMsg_2, 'html'))
     raw_string2 = base64.urlsafe_b64encode(mimeMessage2.as_bytes()).decode()
@@ -110,7 +108,7 @@ def my_job3(message3):
    #Envío del tercer correo
    
     mimeMessage3 = MIMEMultipart()
-    mimeMessage3['to'] = '---- ' # Destinatarios (Cuentas de correos)
+    mimeMessage3['to'] = 'sg.mejiar@alum.up.edu.pe' # Destinatarios (Cuentas de correos)
     mimeMessage3['subject'] = 'Mensaje enviado desde Python 3'
     mimeMessage3.attach(MIMEText(emailMsg_3, 'html'))
     raw_string3 = base64.urlsafe_b64encode(mimeMessage3.as_bytes()).decode()
