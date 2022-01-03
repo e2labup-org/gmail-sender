@@ -14,14 +14,7 @@ Descripción del Script:
 
 Requerimientos:
 - Python (versión usada 3.7.7) 
-
-Módulos y Librerías de Python:
-- APScheduler==3.7.0
-- Datetime==4.3
-- google-api-python-client==2.7.0
-- google-auth==1.30.1
-- google-auth-httplib2==0.1.0
-- google-auth-oauthlib==0.4.4
+- Instalar el file requirements.txt (pip3 install -r requirements.txt)
 
 Enable Gmail API:
 1. Ingresar a console.cloud.google.com desde una cuenta de Gmail.
