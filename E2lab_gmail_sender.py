@@ -24,46 +24,35 @@ class Participant():
         self.telefono = telefono
         self.label = label
 
-    def message_to_send(self,tipo_de_correo):
+    def message_to_send(self,mensaje,asunto):
 
-        mimeMessage1 = MIMEMultipart()
-        mimeMessage1['to'] = self.email # Destinatario 
+        mimeMessage = MIMEMultipart()
+        mimeMessage['to'] = self.email # Destinatario 
+        mimeMessage['subject'] = asunto #asunto
+        mimeMessage.attach(MIMEText(mensaje.format(self.nombres,self.apellidos,self.label), 'html')) #mensaje
 
-        if tipo_de_correo == 'Personalizado': #Mail con el Link para la sesión
+        raw_string = base64.urlsafe_b64encode(mimeMessage.as_bytes()).decode()
 
-            mimeMessage1['subject'] = 'E2LABUP | Link Experimento'
-            mimeMessage1.attach(MIMEText(open(Path("Message_personal.html")).read().format(self.nombres,self.apellidos,self.label), 'html'))
+        service.users().messages().send(userId='me', body={'raw': raw_string}).execute() #envia el correo
+        print("Correo enviado para: {} {} | {}".format(self.nombres,self.apellidos,self.email))
 
-        elif tipo_de_correo == 'Recordatorio': #Recordatorio 30 min antes
-            
-            mimeMessage1['subject'] = 'E2LABUP | Recordatorio sesión experimental en línea HOY'
-            mimeMessage1.attach(MIMEText(open(Path("Message_reminder.html")).read().format(self.nombres,self.apellidos), 'html'))
-
-        else: #Fin del experimento
-
-            mimeMessage1['subject'] = 'E2LABUP | Fin Experimento de Hoy'
-            mimeMessage1.attach(MIMEText(open(Path("Message_final.html")).read().format(self.nombres,self.apellidos), 'html'))
-    
-        raw_string1 = base64.urlsafe_b64encode(mimeMessage1.as_bytes()).decode()
-
-        service.users().messages().send(userId='me', body={'raw': raw_string1}).execute() #envia el correo
-        print("Correo enviado para: {} {} al {}".format(self.nombres,self.apellidos,self.email))
-
-    def send_email(self,fecha,tipo_de_correo):
+    def send_email(self,fecha,mensaje,asunto):
 
         fecha = datetime.strptime(fecha, '%d/%m/%Y-%H:%M')
-        sched.add_job(self.message_to_send, 'date', run_date=((fecha)), args=[tipo_de_correo])
-        print("Preparando correo para: {} {} al {}".format(self.nombres,self.apellidos,self.email))
+        sched.add_job(self.message_to_send, 'date', run_date=((fecha)), args=[mensaje,asunto])
+        print("Preparando correo para: {} {} | {}".format(self.nombres,self.apellidos,self.email))
 
 ###########################################################################
 
 class E2lab_email(): 
 
-    def __init__(self,data,fecha):
+    def __init__(self,data,fecha,mensaje,asunto):
         self.data = data
         self.fecha = fecha
+        self.mensaje = mensaje 
+        self.asunto = asunto
 
-    def send_emails(self,tipo_de_correo):
+    def send_emails(self):
 
         ############ File Format #########
         # Apellidos | Nombres | Email | Telefono | Label 
@@ -77,12 +66,15 @@ class E2lab_email():
                     email = new_data[2],
                     telefono = new_data[3],
                     label = new_data[4]
-                ).send_email(self.fecha,tipo_de_correo)
+                ).send_email(self.fecha,self.mensaje,self.asunto)
 
 session = E2lab_email(
-                data = 'test.csv',
-                fecha = "3/01/2022-18:12" #dd/mm/aaaa-hh:mm
-                ) 
-session.send_emails(tipo_de_correo='Recordatorio') 
+                data = 'test.csv', #participantes correos/nombres/apellidos/telefono/label/etc
+                fecha = "4/01/2022-12:16", #dd/mm/aaaa-hh:mm
+                mensaje = open(Path("htmls/Message_reminder.html")).read(), #htmls/mensaje.html
+                asunto = 'E2LABUP | Reminder' #asunto que sera enviado en el mail
+            )
+
+session.send_emails() #envia los mensajes
 
 sched.start() #no escribir nada despues de esto
