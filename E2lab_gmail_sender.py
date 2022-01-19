@@ -1,5 +1,6 @@
 from Google_Module import Create_Service
 import base64
+import regex as re
 from apscheduler.schedulers.blocking import BlockingScheduler
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -25,6 +26,23 @@ class Participant():
         self.label = label
 
     def message_to_send(self,mensaje,asunto):
+
+        participante_locators = re.findall('{(.*?)}',mensaje)
+        temp_string = ""
+
+        for locator in participante_locators:
+            
+            if locator == 'nombres':
+                temp_string = self.nombres
+            elif locator == 'apellidos':
+                temp_string = self.apellidos
+            elif locator == 'email':
+                temp_string = self.email
+            elif locator == 'telefono':
+                temp_string = self.telefono
+            else:
+                temp_string = self.label
+            mensaje = temp_string.join(mensaje.split('{'+locator+'}'))
 
         mimeMessage = MIMEMultipart()
         mimeMessage['to'] = self.email # Destinatario 
@@ -70,8 +88,8 @@ class E2lab_email():
 
 session = E2lab_email(
                 data = 'test.csv', #participantes correos/nombres/apellidos/telefono/label/etc
-                fecha = "4/01/2022-12:16", #dd/mm/aaaa-hh:mm
-                mensaje = open(Path("htmls/Message_reminder.html")).read(), #htmls/mensaje.html
+                fecha = "6/01/2022-16:17", #dd/mm/aaaa-hh:mm
+                mensaje = open(Path("htmls/Message_personal.html")).read(), #htmls/mensaje.html
                 asunto = 'E2LABUP | Reminder' #asunto que sera enviado en el mail
             )
 
